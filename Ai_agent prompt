@@ -1,0 +1,228 @@
+# Code Quality agent-------------------------------------------------------------------------------------------------------------------------------
+You are a Senior Code Quality Reviewer.
+
+Respond using ONLY the following fields.
+Do NOT format as JSON.
+Do NOT use markdown.
+
+Analyze the following {{ $node["Pick Code File"].json.language }} code:
+
+{{ $node["Download File"].json.data }}
+
+Respond EXACTLY in this format (no JSON):
+
+SCORE: <number>
+STRENGTHS:
+- <point>
+- <point>
+ISSUES:
+- <point>
+- <point>
+RECOMMENDATIONS:
+- <point>
+- <point>
+
+
+# Security agent-------------------------------------------------------------------------------------------------------------------------------
+You are a Senior Software Security Auditor.
+
+Follow these rules strictly:
+- Do NOT return JSON
+- Do NOT use markdown
+- Do NOT add extra explanations
+- Follow the exact output format provided
+
+Analyze the following {{ $node["Pick Code File"].json.language }} code for security risks:
+
+{{ $node["Download File"].json.data }}
+
+Respond EXACTLY in this format:
+
+RISK_LEVEL: <Low | Medium | High>
+
+ISSUES:
+- <security issue>
+- <security issue>
+
+RECOMMENDATIONS:
+- <security recommendation>
+- <security recommendation>
+
+
+# Performance agent-------------------------------------------------------------------------------------------------------------------------------
+You are a Senior Software Performance Engineer.
+
+Follow these rules strictly:
+- Do NOT return JSON
+- Do NOT use markdown
+- Do NOT add extra explanations
+- Follow the exact output format provided
+
+Analyze the following {{ $node["Pick Code File"].json.language }} code for performance issues:
+
+{{ $node["Download File"].json.data }}
+
+Respond EXACTLY in this format:
+
+PERFORMANCE_SCORE: <number between 1 and 100>
+
+BOTTLENECKS:
+- <performance issue>
+- <performance issue>
+
+OPTIMIZATIONS:
+- <optimization suggestion>
+- <optimization suggestion>
+
+
+# Map Code Quality Fields-------------------------------------------------------------------------------------------------------------------------------
+
+const text = $json.output;
+
+const score = Number(text.match(/SCORE:\s*(\d+)/)?.[1] ?? 0);
+
+const extractList = (label) => {
+  const match = text.split(label + ":")[1];
+  if (!match) return [];
+  return match
+    .split("\n")
+    .filter(l => l.trim().startsWith("-"))
+    .map(l => l.replace("-", "").trim());
+};
+
+return [{
+  json: {
+    score,
+    strengths: extractList("STRENGTHS"),
+    issues: extractList("ISSUES"),
+    recommendations: extractList("RECOMMENDATIONS")
+  }
+}];
+
+
+# Map Security Fields-------------------------------------------------------------------------------------------------------------------------------
+
+const text = $json.output || "";
+
+const riskMatch = text.match(/RISK_LEVEL:\s*(Low|Medium|High)/i);
+const risk_level = riskMatch ? riskMatch[1] : "Unknown";
+
+const extractList = (label) => {
+  const section = text.split(label + ":")[1];
+  if (!section) return [];
+  return section
+    .split("\n")
+    .filter(line => line.trim().startsWith("-"))
+    .map(line => line.replace("-", "").trim());
+};
+
+return [
+  {
+    json: {
+      risk_level,
+      security_issues: extractList("ISSUES"),
+      recommendations: extractList("RECOMMENDATIONS")
+    }
+  }
+];
+
+
+
+# Map Performance Fields-------------------------------------------------------------------------------------------------------------------------------
+
+const text = $json.output || "";
+
+const scoreMatch = text.match(/PERFORMANCE_SCORE:\s*(\d+)/);
+const performance_score = scoreMatch ? Number(scoreMatch[1]) : 0;
+
+const extractList = (label) => {
+  const section = text.split(label + ":")[1];
+  if (!section) return [];
+  return section
+    .split("\n")
+    .filter(line => line.trim().startsWith("-"))
+    .map(line => line.replace("-", "").trim());
+};
+
+return [
+  {
+    json: {
+      performance_score,
+      bottlenecks: extractList("BOTTLENECKS"),
+      optimizations: extractList("OPTIMIZATIONS")
+    }
+  }
+];
+
+
+
+# Final Report Generator-------------------------------------------------------------------------------------------------------------------------------
+You are a Senior AI Code Reviewer.
+
+Return ONLY valid JSON.
+Return a RAW JSON object.
+Do NOT include markdown.
+Do NOT include code fences.
+Do NOT include ``` or ```json anywhere.
+Do NOT include explanations outside JSON.
+
+You are given PRE-ANALYZED results.
+Do NOT invent new findings.
+Do NOT assume missing context.
+
+Interpret the inputs as follows:
+- Bottlenecks represent performance ISSUES.
+- Optimizations represent actionable SUGGESTIONS.
+- performance_score must influence overall_score.
+
+Using the following analyses, generate a structured code review.
+
+Code Quality:
+{{ JSON.stringify($node["Map Code Quality Fields"].json) }}
+
+Security:
+{{ JSON.stringify($node["Map Security Fields"].json) }}
+
+Performance:
+{{ JSON.stringify($node["Map Performance Fields"].json) }}
+
+Generate final JSON report with:
+- overall_score (0–10, derived from all scores)
+- summary (concise, factual)
+- issues (array of strings or objects)
+- suggestions (array of strings or objects)
+
+
+
+# Clean Final JSON-------------------------------------------------------------------------------------------------------------------------------
+
+// Step 1: Get raw AI output (string)
+const raw = items[0].json.output;
+
+// Step 2: Parse the JSON string
+let parsed;
+try {
+  parsed = JSON.parse(raw);
+} catch (e) {
+  throw new Error("AI output is not valid JSON");
+}
+
+// Step 3: Normalize for backend
+const overallScore = parsed.overall_score ?? null;
+const issues = parsed.issues ?? [];
+const suggestions = parsed.suggestions ?? [];
+
+return [
+  {
+    json: {
+      overall_score: overallScore,
+      summary: parsed.summary ?? "",
+      issues: issues.map(text => ({
+        description: text
+      })),
+      suggestions: suggestions.map(text => ({
+        description: text
+      }))
+    }
+  }
+];
