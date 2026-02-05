@@ -9,7 +9,7 @@ Issues list
 Suggestions list
 Categories (Security / Performance / Code Quality / General)
 
-# 🚀 Features
+## 🚀 Features
 Django REST API endpoint
 ✅ Integrates with n8n webhook AI agent 
 ✅ Handles CORS + OPTIONS preflight 
@@ -17,14 +17,14 @@ Django REST API endpoint
 ✅ Returns clean structured JSON 
 ✅ Works with Postman + React frontend 
 
-# 🏗️ Tech Stack
+## 🏗️ Tech Stack
 Python, 
 Django, 
 Requests, 
 n8n (local AI workflow), 
 JSON API, 
 
-# 📌 API Endpoint
+##📌 API Endpoint
 Request Body
 ```bash
 {
@@ -52,7 +52,7 @@ Response Example
 }
 ```
 
-# ⚙️ Setup Instructions
+## ⚙️ Setup Instructions
 ### 1️⃣ Clone the repository
 ```bash
 https://github.com/harshJyoriya1009/Code_review_backend.git
@@ -80,6 +80,7 @@ python manage.py runserver
 
 Backend will run at:
 http://localhost:8000
+
 
 
 
