@@ -1,13 +1,13 @@
 ﻿# AI Code Reviewer — Backend + AI Agent
 
-This repository contains the backend API and AI agent integration for the AI Code Review Agent project.
+This repository contains the **Backend API and AI agent integration** for the AI Code Review Agent project.
 
 The backend accepts a GitHub repository + file path, sends it to an AI workflow (n8n), and returns a structured JSON response including:
-Overall score (0–10)
-Summary
-Issues list
-Suggestions list
-Categories (Security / Performance / Code Quality / General)
+- Overall score (0–10)
+- Summary
+- Issues list
+- Suggestions list
+- Categories (Security / Performance / Code Quality / General)
 
 ## 🚀 Features
 Django REST API endpoint
@@ -24,7 +24,7 @@ Requests,
 n8n (local AI workflow), 
 JSON API, 
 
-##📌 API Endpoint
+## 📌 API Endpoint
 Request Body
 ```bash
 {
@@ -80,6 +80,7 @@ python manage.py runserver
 
 Backend will run at:
 http://localhost:8000
+
 
 
 
