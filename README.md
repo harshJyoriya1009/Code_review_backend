@@ -11,18 +11,18 @@ Categories (Security / Performance / Code Quality / General)
 
 # 🚀 Features
 Django REST API endpoint
-✅ Integrates with n8n webhook AI agent
-✅ Handles CORS + OPTIONS preflight
-✅ Normalizes AI output for frontend safety
-✅ Returns clean structured JSON
-✅ Works with Postman + React frontend
+✅ Integrates with n8n webhook AI agent 
+✅ Handles CORS + OPTIONS preflight 
+✅ Normalizes AI output for frontend safety 
+✅ Returns clean structured JSON 
+✅ Works with Postman + React frontend 
 
 # 🏗️ Tech Stack
-Python
-Django
-Requests
-n8n (local AI workflow)
-JSON API
+Python, 
+Django, 
+Requests, 
+n8n (local AI workflow), 
+JSON API, 
 
 # 📌 API Endpoint
 Request Body
@@ -55,7 +55,7 @@ Response Example
 # ⚙️ Setup Instructions
 ### 1️⃣ Clone the repository
 ```bash
-https://github.com/harshJyoriya1009/Code_review_frontend.git
+https://github.com/harshJyoriya1009/Code_review_backend.git
 ```
 
 ### 2️⃣ Create virtual environment
@@ -80,6 +80,7 @@ python manage.py runserver
 
 Backend will run at:
 http://localhost:8000
+
 
 
 
